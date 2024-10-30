@@ -17,23 +17,46 @@
 
     let textarea, submitButton;
 
-    document.addEventListener('keydown', function(e) {
-        if (e.ctrlKey && e.altKey && e.key === 'j') {
-            submitButton.click();
-        }
-        if (e.ctrlKey && e.altKey && e.key === 't') {
-            const inputTime = prompt("댓글 작성 시간 입력 (형식: YYYY-MM-DD HH:MM:SS, 24시간 형식 사용)\n입력하면 자동으로 댓글창에 내용 써짐, 써진 후 댓글창 클릭해서 아무 문자 하나 친 뒤 백스페이스로 삭제해야 작동함. 댓글창에 아무 상호작용 안해두면 댓글창 비어있다고 뜸");
+    const description = document.createElement("p");
+    description.textContent = "댓글 작성 시간 입력 (형식: YYYY-MM-DD HH:MM:SS, 24시간 형식 사용)\n입력하면 자동으로 댓글창에 내용 채워짐, 내용 채워진 후 댓글창 클릭해서 아무 문자 하나 친 뒤 백스페이스로 삭제해야 작동함. 댓글창에 아무 상호작용 안해두면 댓글창 비어있다고 뜸";
+    description.style.marginBottom = '10px';
+    description.style.fontSize = "100%";
+    description.style.width = '100%';
+    description.style.height = '40px';
+    description.style.backgroundColor = '#f0f0f0';
+    description.style.border = '1px solid #ccc';
+    description.style.borderRadius = '4px';
+    description.style.padding = '10px';
 
-            if (inputTime) {
-                const userTime = new Date(inputTime);
-                if (!isNaN(userTime.getTime())) {
-                    targetTimeUTC = new Date(userTime.getTime()); // UTC로 변환
-                    alert(`댓글 작성 시간이 ${userTime}로 설정되었습니다.`);
-                    isActive = true; // 활성화
-                    isCommentPosted = false; // 댓글 작성 여부 초기화
-                } else {
-                    alert("잘못된 시간 형식입니다. 다시 시도해주세요.");
-                }
+    const myInputBox = document.createElement('input');
+    myInputBox.type = 'text';
+    myInputBox.placeholder = '댓글 작성 시간 입력 (형식: YYYY-MM-DD HH:MM:SS, 24시간 형식 사용)';
+    myInputBox.style.marginBottom = '10px';
+    myInputBox.style.fontSize = "100%";
+    myInputBox.style.width = '100%';
+    myInputBox.style.height = '40px';
+    myInputBox.style.backgroundColor = '#f0f0f0';
+    myInputBox.style.border = '1px solid #ccc';
+    myInputBox.style.borderRadius = '4px';
+    myInputBox.style.padding = '10px';
+
+    const target = document.querySelector("#wrapper > div.ic-app-nav-toggle-and-crumbs.no-print");
+    if (!target) alert("없음");
+
+    target.parentNode.insertBefore(myInputBox, target.nextSibling);
+    target.parentNode.insertBefore(description, target.nextSibling);
+
+
+    myInputBox.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' && myInputBox.value.length) {
+            const userTime = new Date(myInputBox.value);
+            if (!isNaN(userTime.getTime())) {
+                targetTimeUTC = new Date(userTime.getTime()); // UTC로 변환
+                alert(`댓글 작성 시간이 ${userTime}로 설정되었습니다.`);
+                isActive = true; // 활성화
+                isCommentPosted = false; // 댓글 작성 여부 초기화
+            } else {
+                alert("잘못된 시간 형식입니다. 다시 시도해주세요.");
             }
 
             const iframe = document.querySelector("#tool_content");
